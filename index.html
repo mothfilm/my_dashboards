@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инфографика: Анализ Рынка Масла Авокадо на Ozon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F7FF;
+            color: #0A2463;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border-left: 5px solid #1E56A0;
+        }
+        .flowchart-step {
+            position: relative;
+            padding-left: 2rem; 
+            padding-bottom: 2rem;
+            border-left: 2px solid #76ABDF;
+        }
+        .flowchart-step:last-child {
+            border-left: none;
+            padding-bottom: 0;
+        }
+        .flowchart-step::before {
+            content: '●';
+            position: absolute;
+            left: -0.6rem;
+            top: 0;
+            font-size: 1.5rem;
+            color: #1E56A0;
+        }
+        .flowchart-step:last-child::before {
+             display: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-2">Анализ Рынка Масла Авокадо</h1>
+            <p class="text-lg text-[#3E6D9C]">Нишевый сегмент "нерафинированное, 500 мл" на платформе Ozon</p>
+        </header>
+
+        <section id="market-overview" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Обзор Рынка</h2>
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <p class="text-base text-[#3E6D9C]">Рынок масел авокадо представляет собой широкую категорию, однако целевой сегмент нерафинированного масла объемом 500 мл является микронишей с высоким потенциалом. Несмотря на небольшой оборот, он характеризуется низкой конкуренцией и высокой платежеспособностью аудитории, что создает благоприятные условия для роста.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-[#0A2463]">
+                <div class="kpi-card">
+                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Оборот всех масел авокадо</h3>
+                    <p class="text-4xl font-bold">10,4M ₽</p>
+                    <p class="text-sm text-gray-500">в месяц</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Оборот нерафинированных масел</h3>
+                    <p class="text-4xl font-bold">965K ₽</p>
+                    <p class="text-sm text-gray-500">в месяц</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Целевой сегмент (500 мл)</h3>
+                    <p class="text-4xl font-bold">104K ₽</p>
+                    <p class="text-sm text-gray-500">в месяц</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="competitive-landscape" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Конкурентная Среда</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4 text-[#0A2463]">Доли рынка ключевых игроков</h3>
+                    <p class="text-sm text-[#3E6D9C] text-center mb-4">На рынке доминируют два крупных игрока, SoMuch и Маслогия, занимая в сумме более 75%. Бренд Esoro уверенно находится на третьем месте, что является отличной стартовой позицией для увеличения доли.</p>
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-center mb-4 text-[#0A2463]">Сравнение цен в премиум-сегменте</h3>
+                    <p class="text-sm text-[#3E6D9C] text-center mb-4">Esoro предлагает самую привлекательную цену среди прямых конкурентов в премиум-сегменте, что является ключевым конкурентным преимуществом. Baytler выступает в бюджетном сегменте и не является прямым конкурентом.</p>
+                    <div class="chart-container h-80 md:h-96">
+                        <canvas id="priceComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="esoro-position" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Позиция Бренда Esoro: SWOT-анализ</h2>
+             <div class="text-center max-w-3xl mx-auto mb-10">
+                <p class="text-base text-[#3E6D9C]">Анализ сильных и слабых сторон, а также возможностей и угроз (ограничений) показывает, что у бренда Esoro есть все шансы на успех. Основная задача — использовать ценовое преимущество и низкую конкуренцию для активного роста.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#4C99F9]">
+                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">✅ Сильные стороны</h3>
+                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
+                        <li>Цена на 15-25% ниже, чем у лидеров.</li>
+                        <li>Стабильные ежемесячные продажи.</li>
+                        <li>Уверенное 3-е место на рынке.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#4C99F9]">
+                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">🚀 Возможности для роста</h3>
+                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
+                        <li>Низкая конкуренция (всего 4 активных игрока).</li>
+                        <li>Потенциал захвата доли у переоцененных брендов.</li>
+                        <li>Использование ценового преимущества как УТП.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#76ABDF]">
+                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">❗ Ограничения Рынка</h3>
+                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
+                        <li>Микроскопический размер рыночного сегмента.</li>
+                        <li>Ограниченная аудитория покупателей.</li>
+                        <li>Низкая частота повторных покупок.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Стратегический План Развития</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-[#1E56A0]">Маркетинговая стратегия</h3>
+                     <p class="text-sm text-[#3E6D9C] text-center mb-6">Комплексный подход, основанный на улучшении видимости продукта на Ozon и прямом позиционировании против конкурентов, позволит достичь поставленных целей по росту доли рынка.</p>
+                    <div>
+                        <div class="flowchart-step">
+                            <h4 class="font-bold text-lg text-[#0A2463]">SEO и Отзывы</h4>
+                            <p class="text-[#3E6D9C]">Оптимизация карточки товара и стимулирование положительных отзывов для повышения доверия и органического трафика.</p>
+                        </div>
+                        <div class="flowchart-step">
+                            <h4 class="font-bold text-lg text-[#0A2463]">Внутренняя реклама</h4>
+                            <p class="text-[#3E6D9C]">Продвижение в поиске и категориях Ozon для привлечения целевой аудитории.</p>
+                        </div>
+                        <div class="flowchart-step">
+                            <h4 class="font-bold text-lg text-[#0A2463]">Контент и Позиционирование</h4>
+                            <p class="text-[#3E6D9C]">Качественные фото/видео. Акцент на "премиум без переплаты" и прямое сравнение с конкурентами.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-8">
+                     <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4 text-[#1E56A0]">Краткосрочные цели (3-6 мес.)</h3>
+                        <div class="flex justify-around text-center">
+                            <div>
+                                <p class="text-3xl font-bold text-[#0A2463]">28-32%</p>
+                                <p class="text-[#3E6D9C]">Целевая доля</p>
+                            </div>
+                            <div>
+                                <p class="text-3xl font-bold text-[#0A2463]">32.4K ₽</p>
+                                <p class="text-[#3E6D9C]">Целевой оборот</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                         <h3 class="text-xl font-bold text-center mb-4 text-[#1E56A0]">Оптимальное ценообразование</h3>
+                         <p class="text-sm text-[#3E6D9C] text-center mb-4">Стратегия использует механизм соинвестирования Ozon, позволяя предложить покупателю конкурентную цену, сохранив при этом высокую маржинальность для продавца.</p>
+                         <ul class="space-y-2 text-[#3E6D9C]">
+                            <li><span class="font-semibold text-[#0A2463]">Цена продавца:</span> 1600 ₽</li>
+                            <li><span class="font-semibold text-[#0A2463]">Соинвест Ozon (15%):</span> -240 ₽</li>
+                            <li><span class="font-bold text-[#1E56A0]">Цена для покупателя:</span> 1360 ₽</li>
+                            <li class="pt-2 border-t mt-2"><span class="font-bold text-green-700">Маржа продавца: 15.6%</span></li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Register the datalabels plugin globally
+        Chart.register(ChartDataLabels);
+
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) {
+                return str;
+            }
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines.filter(line => line.length > 0);
+        }
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+
+        const globalChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#0A2463',
+                        font: {
+                           family: "'Inter', sans-serif"
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    },
+                     bodyFont: {
+                        family: "'Inter', sans-serif"
+                    },
+                    titleFont: {
+                        family: "'Inter', sans-serif"
+                    }
+                },
+                datalabels: { // Datalabels plugin configuration
+                    color: '#0A2463',
+                    font: {
+                        weight: 'bold',
+                        family: "'Inter', sans-serif",
+                        size: 14
+                    },
+                    formatter: (value, context) => {
+                        // Default formatter, will be overridden for specific charts
+                        return value;
+                    }
+                }
+            },
+            color: '#0A2463',
+            font: {
+                family: "'Inter', sans-serif"
+            }
+        };
+
+        // Ensure charts are initialized after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const marketShareData = {
+                labels: ['SoMuch', 'Маслогия', 'Esoro', 'Baytler'],
+                datasets: [{
+                    label: 'Доля рынка',
+                    data: [41.7, 34.0, 18.4, 5.9],
+                    backgroundColor: ['#1E56A0', '#4C99F9', '#76ABDF', '#D6E6F2'],
+                    borderColor: '#F0F7FF',
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            };
+
+            new Chart(document.getElementById('marketShareChart'), {
+                type: 'doughnut',
+                data: marketShareData,
+                options: {
+                    ...globalChartOptions,
+                    plugins: {
+                        ...globalChartOptions.plugins,
+                        tooltip: {
+                            ...globalChartOptions.plugins.tooltip,
+                            callbacks: {
+                            ...globalChartOptions.plugins.tooltip.callbacks,
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#FFF',
+                            formatter: (value, context) => {
+                                let sum = 0;
+                                let dataArr = context.chart.data.datasets[0].data;
+                                dataArr.map(data => {
+                                    sum += data;
+                                });
+                                let percentage = (value * 100 / sum).toFixed(1) + '%';
+                                return percentage;
+                            },
+                            textShadowBlur: 4,
+                            textShadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            });
+
+            const priceComparisonData = {
+                labels: ['SoMuch', 'Маслогия', 'Esoro', 'Oliomania'],
+                datasets: [{
+                    label: 'Цена (₽)',
+                    data: [1457, 1559, 1244, 1331],
+                    backgroundColor: ['#1E56A0', '#4C99F9', '#76ABDF', '#D6E6F2'],
+                    borderColor: '#1E56A0',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            };
+
+            new Chart(document.getElementById('priceComparisonChart'), {
+                type: 'bar',
+                data: priceComparisonData,
+                options: {
+                    ...globalChartOptions,
+                    plugins: {
+                        ...globalChartOptions.plugins,
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 4,
+                            formatter: (value, context) => {
+                                return value + ' ₽';
+                            },
+                            color: '#0A2463'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: '#e0e7ff'
+                            },
+                            ticks: {
+                                color: '#3E6D9C'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#3E6D9C'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
