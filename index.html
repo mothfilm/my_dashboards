@@ -3,383 +3,945 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Инфографика: Анализ Рынка Масла Авокадо на Ozon</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Анализ рынка премиальных масел Esoro на Озоне</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F0F7FF;
-            color: #0A2463;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.5rem;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
         .chart-container {
             position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
             height: 300px;
-            max-height: 400px;
+            margin-top: 20px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        
+        .competitive-table {
+            overflow-x: auto;
+            margin-top: 20px;
         }
-        .kpi-card {
-            background-color: white;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
+        
+        .competitive-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .competitive-table th,
+        .competitive-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .competitive-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .our-position {
+            background: #e8f4fd !important;
+            border-left: 4px solid #3498db;
+        }
+        
+        .scenario-comparison {
+            grid-column: 1 / -1;
+        }
+        
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .scenario-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            border-left: 5px solid #1E56A0;
+            transition: transform 0.3s ease;
         }
-        .flowchart-step {
+        
+        .scenario-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .scenario-card.recommended {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            border: 3px solid #27ae60;
             position: relative;
-            padding-left: 2rem; 
-            padding-bottom: 2rem;
-            border-left: 2px solid #76ABDF;
         }
-        .flowchart-step:last-child {
-            border-left: none;
-            padding-bottom: 0;
-        }
-        .flowchart-step::before {
-            content: '●';
+        
+        .scenario-card.recommended::before {
+            content: "РЕКОМЕНДУЕМЫЙ";
             position: absolute;
-            left: -0.6rem;
-            top: 0;
-            font-size: 1.5rem;
-            color: #1E56A0;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-        .flowchart-step:last-child::before {
-             display: none;
+        
+        .scenario-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .scenario-metric {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .scenario-metric-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .scenario-metric-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .risk-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .risk-low {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .risk-medium {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+        
+        .risk-high {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .key-insights {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+        }
+        
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .insight-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .insight-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-plan {
+            grid-column: 1 / -1;
+        }
+        
+        .action-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .action-step:hover {
+            transform: translateX(5px);
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .scenario-cards {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="antialiased">
-    <div class="container mx-auto p-4 md:p-8">
-
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-2">Анализ Рынка Масла Авокадо</h1>
-            <p class="text-lg text-[#3E6D9C]">Нишевый сегмент "нерафинированное, 500 мл" на платформе Ozon</p>
-        </header>
-
-        <section id="market-overview" class="mb-16">
-            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Обзор Рынка</h2>
-            <div class="text-center max-w-3xl mx-auto mb-10">
-                <p class="text-base text-[#3E6D9C]">Рынок масел авокадо представляет собой широкую категорию, однако целевой сегмент нерафинированного масла объемом 500 мл является микронишей с высоким потенциалом. Несмотря на небольшой оборот, он характеризуется низкой конкуренцией и высокой платежеспособностью аудитории, что создает благоприятные условия для роста.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-[#0A2463]">
-                <div class="kpi-card">
-                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Оборот всех масел авокадо</h3>
-                    <p class="text-4xl font-bold">10,4M ₽</p>
-                    <p class="text-sm text-gray-500">в месяц</p>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Анализ рынка премиальных масел Esoro</h1>
+            <p>Комплексное исследование конкурентного ландшафта и стратегических возможностей на Озоне</p>
+        </div>
+        
+        <div class="grid">
+            <!-- Общая картина рынка -->
+            <div class="card">
+                <h3><span class="icon">🌍</span>Общий рынок масел</h3>
+                <div class="metric">
+                    <span class="metric-label">Общая выручка</span>
+                    <span class="metric-value">117.6 млн ₽</span>
                 </div>
-                <div class="kpi-card">
-                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Оборот нерафинированных масел</h3>
-                    <p class="text-4xl font-bold">965K ₽</p>
-                    <p class="text-sm text-gray-500">в месяц</p>
+                <div class="metric">
+                    <span class="metric-label">Общие продажи</span>
+                    <span class="metric-value">134,673 шт</span>
                 </div>
-                <div class="kpi-card">
-                    <h3 class="text-lg font-semibold text-[#3E6D9C] mb-2">Целевой сегмент (500 мл)</h3>
-                    <p class="text-4xl font-bold">104K ₽</p>
-                    <p class="text-sm text-gray-500">в месяц</p>
+                <div class="metric">
+                    <span class="metric-label">Средний чек</span>
+                    <span class="metric-value">874 ₽</span>
                 </div>
-            </div>
-        </section>
-
-        <section id="competitive-landscape" class="mb-16">
-            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Конкурентная Среда</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-center mb-4 text-[#0A2463]">Доли рынка ключевых игроков</h3>
-                    <p class="text-sm text-[#3E6D9C] text-center mb-4">На рынке доминируют два крупных игрока, SoMuch и Маслогия, занимая в сумме более 75%. Бренд Esoro уверенно находится на третьем месте, что является отличной стартовой позицией для увеличения доли.</p>
-                    <div class="chart-container h-80 md:h-96">
-                        <canvas id="marketShareChart"></canvas>
-                    </div>
+                <div class="metric">
+                    <span class="metric-label">Всего товаров</span>
+                    <span class="metric-value">2,720 позиций</span>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold text-center mb-4 text-[#0A2463]">Сравнение цен в премиум-сегменте</h3>
-                    <p class="text-sm text-[#3E6D9C] text-center mb-4">Esoro предлагает самую привлекательную цену среди прямых конкурентов в премиум-сегменте, что является ключевым конкурентным преимуществом. Baytler выступает в бюджетном сегменте и не является прямым конкурентом.</p>
-                    <div class="chart-container h-80 md:h-96">
-                        <canvas id="priceComparisonChart"></canvas>
-                    </div>
+                <div class="chart-container">
+                    <canvas id="marketShareChart"></canvas>
                 </div>
             </div>
-        </section>
-
-        <section id="esoro-position" class="mb-16">
-            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Позиция Бренда Esoro: SWOT-анализ</h2>
-             <div class="text-center max-w-3xl mx-auto mb-10">
-                <p class="text-base text-[#3E6D9C]">Анализ сильных и слабых сторон, а также возможностей и угроз (ограничений) показывает, что у бренда Esoro есть все шансы на успех. Основная задача — использовать ценовое преимущество и низкую конкуренцию для активного роста.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#4C99F9]">
-                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">✅ Сильные стороны</h3>
-                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
-                        <li>Цена на 15-25% ниже, чем у лидеров.</li>
-                        <li>Стабильные ежемесячные продажи.</li>
-                        <li>Уверенное 3-е место на рынке.</li>
-                    </ul>
+            
+            <!-- Текущие показатели Esoro -->
+            <div class="card">
+                <h3><span class="icon">🎯</span>Текущие показатели Esoro</h3>
+                <div class="metric">
+                    <span class="metric-label">Авокадо (36 шт/мес)</span>
+                    <span class="metric-value">1,496₽ для покупателя</span>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#4C99F9]">
-                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">🚀 Возможности для роста</h3>
-                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
-                        <li>Низкая конкуренция (всего 4 активных игрока).</li>
-                        <li>Потенциал захвата доли у переоцененных брендов.</li>
-                        <li>Использование ценового преимущества как УТП.</li>
-                    </ul>
+                <div class="metric">
+                    <span class="metric-label">Тыквенное (22 шт/мес)</span>
+                    <span class="metric-value">1,598₽ для покупателя</span>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#76ABDF]">
-                    <h3 class="text-xl font-bold mb-3 text-[#1E56A0]">❗ Ограничения Рынка</h3>
-                    <ul class="list-disc list-inside space-y-2 text-[#3E6D9C]">
-                        <li>Микроскопический размер рыночного сегмента.</li>
-                        <li>Ограниченная аудитория покупателей.</li>
-                        <li>Низкая частота повторных покупок.</li>
-                    </ul>
+                <div class="metric">
+                    <span class="metric-label">Черный тмин (6 шт/мес)</span>
+                    <span class="metric-value">884₽ для покупателя</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Общая прибыль/месяц</span>
+                    <span class="metric-value">22K₽</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="currentSalesChart"></canvas>
                 </div>
             </div>
-        </section>
-
-        <section id="strategy" class="mb-16">
-            <h2 class="text-3xl font-bold text-center mb-8 text-[#0A2463]">Стратегический План Развития</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="bg-white p-8 rounded-lg shadow-md">
-                    <h3 class="text-2xl font-bold mb-6 text-center text-[#1E56A0]">Маркетинговая стратегия</h3>
-                     <p class="text-sm text-[#3E6D9C] text-center mb-6">Комплексный подход, основанный на улучшении видимости продукта на Ozon и прямом позиционировании против конкурентов, позволит достичь поставленных целей по росту доли рынка.</p>
-                    <div>
-                        <div class="flowchart-step">
-                            <h4 class="font-bold text-lg text-[#0A2463]">SEO и Отзывы</h4>
-                            <p class="text-[#3E6D9C]">Оптимизация карточки товара и стимулирование положительных отзывов для повышения доверия и органического трафика.</p>
+            
+            <!-- Конкурентный анализ авокадо -->
+            <div class="card">
+                <h3><span class="icon">🥑</span>Конкуренция: Авокадо 500мл</h3>
+                <div class="competitive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Позиция</th>
+                                <th>Бренд</th>
+                                <th>Продажи</th>
+                                <th>Цена покупателя</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Oliomania</td>
+                                <td>738 шт</td>
+                                <td>1,299₽</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>La Tourangelle</td>
+                                <td>463 шт</td>
+                                <td>1,581₽</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>La Tourangelle</td>
+                                <td>268 шт</td>
+                                <td>1,628₽</td>
+                            </tr>
+                            <tr class="our-position">
+                                <td><strong>Наша</strong></td>
+                                <td><strong>Esoro</strong></td>
+                                <td><strong>36 шт</strong></td>
+                                <td><strong>1,496₽</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 15px; padding: 15px; background: #e8f4fd; border-radius: 10px;">
+                    <strong>💡 Потенциал:</strong> Сегмент 1,200-1,700₽ = 1,469 продаж, можем захватить 15%
+                </div>
+            </div>
+            
+            <!-- Конкурентный анализ черного тмина -->
+            <div class="card">
+                <h3><span class="icon">🌿</span>Конкуренция: Черный тмин 250мл</h3>
+                <div class="competitive-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Позиция</th>
+                                <th>Бренд</th>
+                                <th>Продажи</th>
+                                <th>Цена покупателя</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Pure</td>
+                                <td>2,813 шт</td>
+                                <td>766₽</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>EL BARAKA</td>
+                                <td>2,418 шт</td>
+                                <td>867₽</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Pure</td>
+                                <td>1,757 шт</td>
+                                <td>598₽</td>
+                            </tr>
+                            <tr class="our-position">
+                                <td><strong>Наша</strong></td>
+                                <td><strong>Esoro</strong></td>
+                                <td><strong>6 шт</strong></td>
+                                <td><strong>884₽</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 15px; padding: 15px; background: #d5f4e6; border-radius: 10px;">
+                    <strong>🚀 НАИБОЛЬШИЙ ПОТЕНЦИАЛ:</strong> Сегмент 700-1,100₽ = 8,951 продаж
+                </div>
+            </div>
+            
+            <!-- Юнит-экономика -->
+            <div class="card">
+                <h3><span class="icon">💰</span>Юнит-экономика (с соинвестом Озон)</h3>
+                <div class="chart-container">
+                    <canvas id="marginChart"></canvas>
+                </div>
+                <div style="margin-top: 15px; font-size: 0.9rem; color: #7f8c8d;">
+                    * С учетом соинвеста Озон 15%, комиссии маркетплейса и базовой рекламы 10%
+                </div>
+            </div>
+        </div>
+        
+        <!-- Сравнение сценариев -->
+        <div class="card scenario-comparison">
+            <h3><span class="icon">📈</span>Сравнение сценариев развития (6 месяцев)</h3>
+            <div class="scenario-cards">
+                <div class="scenario-card">
+                    <div class="scenario-title">Сценарий 1: "Статус-кво"</div>
+                    <p>Только внутренние инструменты, базовая реклама</p>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Продажи</div>
+                            <div class="scenario-metric-value">439 шт</div>
                         </div>
-                        <div class="flowchart-step">
-                            <h4 class="font-bold text-lg text-[#0A2463]">Внутренняя реклама</h4>
-                            <p class="text-[#3E6D9C]">Продвижение в поиске и категориях Ozon для привлечения целевой аудитории.</p>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Выручка</div>
+                            <div class="scenario-metric-value">757K₽</div>
                         </div>
-                        <div class="flowchart-step">
-                            <h4 class="font-bold text-lg text-[#0A2463]">Контент и Позиционирование</h4>
-                            <p class="text-[#3E6D9C]">Качественные фото/видео. Акцент на "премиум без переплаты" и прямое сравнение с конкурентами.</p>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль</div>
+                            <div class="scenario-metric-value">150K₽</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль/мес</div>
+                            <div class="scenario-metric-value">25K₽</div>
                         </div>
                     </div>
+                    <div class="risk-indicator risk-low">Низкий риск</div>
                 </div>
-                <div class="space-y-8">
-                     <div class="bg-white p-6 rounded-lg shadow-md">
-                        <h3 class="text-xl font-bold text-center mb-4 text-[#1E56A0]">Краткосрочные цели (3-6 мес.)</h3>
-                        <div class="flex justify-around text-center">
-                            <div>
-                                <p class="text-3xl font-bold text-[#0A2463]">28-32%</p>
-                                <p class="text-[#3E6D9C]">Целевая доля</p>
-                            </div>
-                            <div>
-                                <p class="text-3xl font-bold text-[#0A2463]">32.4K ₽</p>
-                                <p class="text-[#3E6D9C]">Целевой оборот</p>
-                            </div>
+                
+                <div class="scenario-card recommended">
+                    <div class="scenario-title">Сценарий 2: "Усиление контента"</div>
+                    <p>Тест 3 месяца: отзывы за баллы + бартер + подкуп трафика</p>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Продажи</div>
+                            <div class="scenario-metric-value">975 шт</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Выручка</div>
+                            <div class="scenario-metric-value">1,667K₽</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль</div>
+                            <div class="scenario-metric-value">234K₽</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль/мес</div>
+                            <div class="scenario-metric-value">39K₽</div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md">
-                         <h3 class="text-xl font-bold text-center mb-4 text-[#1E56A0]">Оптимальное ценообразование</h3>
-                         <p class="text-sm text-[#3E6D9C] text-center mb-4">Стратегия использует механизм соинвестирования Ozon, позволяя предложить покупателю конкурентную цену, сохранив при этом высокую маржинальность для продавца.</p>
-                         <ul class="space-y-2 text-[#3E6D9C]">
-                            <li><span class="font-semibold text-[#0A2463]">Цена продавца:</span> 1600 ₽</li>
-                            <li><span class="font-semibold text-[#0A2463]">Соинвест Ozon (15%):</span> -240 ₽</li>
-                            <li><span class="font-bold text-[#1E56A0]">Цена для покупателя:</span> 1360 ₽</li>
-                            <li class="pt-2 border-t mt-2"><span class="font-bold text-green-700">Маржа продавца: 15.6%</span></li>
-                         </ul>
+                    <div class="risk-indicator risk-medium">Средний риск</div>
+                </div>
+                
+                <div class="scenario-card">
+                    <div class="scenario-title">Сценарий 3: "Ценовая война"</div>
+                    <p>Снижение цен на 10%, агрессивный захват доли</p>
+                    <div class="scenario-metrics">
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Продажи</div>
+                            <div class="scenario-metric-value">1,484 шт</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Выручка</div>
+                            <div class="scenario-metric-value">2,256K₽</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль</div>
+                            <div class="scenario-metric-value">329K₽</div>
+                        </div>
+                        <div class="scenario-metric">
+                            <div class="scenario-metric-label">Прибыль/мес</div>
+                            <div class="scenario-metric-value">55K₽</div>
+                        </div>
                     </div>
+                    <div class="risk-indicator risk-high">Высокий риск</div>
                 </div>
             </div>
-        </section>
-
+            
+            <div style="margin-top: 30px;">
+                <canvas id="scenarioComparisonChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+        
+        <!-- Ключевые инсайты -->
+        <div class="key-insights">
+            <h3 style="color: white; margin-bottom: 20px;"><span class="icon">💡</span>Ключевые инсайты</h3>
+            <div class="insights-grid">
+                <div class="insight-item">
+                    <h4>🎯 Черный тмин = драйвер роста</h4>
+                    <p>Лучшая ценовая конкурентоспособность, сегмент 8,951 продаж. Фокус 50% рекламного бюджета сюда.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>🥑 Авокадо = стабильная ниша</h4>
+                    <p>Премиум сегмент 1,469 продаж, можем захватить 15%. Конкурентные цены в своей нише.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>🎃 Тыквенное = сезонная ниша</h4>
+                    <p>Ультра-премиум, ограниченная аудитория. Пик осенью (+120%), летом (-40%).</p>
+                </div>
+                <div class="insight-item">
+                    <h4>⚡ Соинвест Озон = конкурентное преимущество</h4>
+                    <p>15% скидка делает нас значительно доступнее для покупателей во всех сегментах.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- План действий -->
+        <div class="card action-plan">
+            <h3><span class="icon">🚀</span>План реализации рекомендуемого сценария</h3>
+            <div class="action-steps">
+                <div class="action-step">
+                    <div class="step-number">1</div>
+                    <h4>Месяцы 1-3: Тест</h4>
+                    <p>Инвестируем +15% в контент. Покупаем 50-100 отзывов за баллы, бартер с блогерами ЗОЖ, подкуп трафика.</p>
+                </div>
+                <div class="action-step">
+                    <div class="step-number">2</div>
+                    <h4>Месяц 4: Анализ</h4>
+                    <p>Оценка ROI, позиций в поиске, конверсии. Если тест успешен - продолжаем, если нет - откат к базовому.</p>
+                </div>
+                <div class="action-step">
+                    <div class="step-number">3</div>
+                    <h4>Месяцы 5-6: Масштабирование</h4>
+                    <p>При успехе: реинвестируем прибыль в расширение. При неудаче: органический рост с минимальными рисками.</p>
+                </div>
+                <div class="action-step">
+                    <div class="step-number">KPI</div>
+                    <h4>Контрольные точки</h4>
+                    <p>Цели к 6 месяцу: Авокадо 100шт, Тыквенное 80шт, Черный тмин 30шт. ROI рекламы 300%+.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 15px; border-left: 4px solid #27ae60;">
+                <strong>🎯 Точка принятия решения:</strong> Конец 3-го месяца. Если прогноз не оправдался - откат к базовому сценарию без потери лица и критических средств.
+            </div>
+        </div>
     </div>
 
     <script>
-        // Register the datalabels plugin globally
-        Chart.register(ChartDataLabels);
-
-        function wrapLabel(str, maxWidth) {
-            if (str.length <= maxWidth) {
-                return str;
-            }
-            const words = str.split(' ');
-            const lines = [];
-            let currentLine = '';
-            for (const word of words) {
-                if ((currentLine + word).length > maxWidth) {
-                    lines.push(currentLine.trim());
-                    currentLine = '';
-                }
-                currentLine += word + ' ';
-            }
-            lines.push(currentLine.trim());
-            return lines.filter(line => line.length > 0);
-        }
-
-        const tooltipTitleCallback = (tooltipItems) => {
-            const item = tooltipItems[0];
-            let label = item.chart.data.labels[item.dataIndex];
-            if (Array.isArray(label)) {
-                return label.join(' ');
-            }
-            return label;
-        };
-
-        const globalChartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#0A2463',
-                        font: {
-                           family: "'Inter', sans-serif"
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        title: tooltipTitleCallback
-                    },
-                     bodyFont: {
-                        family: "'Inter', sans-serif"
-                    },
-                    titleFont: {
-                        family: "'Inter', sans-serif"
-                    }
-                },
-                datalabels: { // Datalabels plugin configuration
-                    color: '#0A2463',
-                    font: {
-                        weight: 'bold',
-                        family: "'Inter', sans-serif",
-                        size: 14
-                    },
-                    formatter: (value, context) => {
-                        // Default formatter, will be overridden for specific charts
-                        return value;
-                    }
-                }
-            },
-            color: '#0A2463',
-            font: {
-                family: "'Inter', sans-serif"
-            }
-        };
-
-        // Ensure charts are initialized after the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const marketShareData = {
-                labels: ['SoMuch', 'Маслогия', 'Esoro', 'Baytler'],
+        // Общий рынок масел - круговая диаграмма
+        const ctx1 = document.getElementById('marketShareChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Авокадо', 'Черный тмин', 'Тыквенное', 'Другие масла'],
                 datasets: [{
-                    label: 'Доля рынка',
-                    data: [41.7, 34.0, 18.4, 5.9],
-                    backgroundColor: ['#1E56A0', '#4C99F9', '#76ABDF', '#D6E6F2'],
-                    borderColor: '#F0F7FF',
+                    data: [32.0, 30.4, 29.1, 8.6],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB', 
+                        '#FFCE56',
+                        '#E7E9ED'
+                    ],
                     borderWidth: 2,
-                    hoverOffset: 4
+                    borderColor: '#fff'
                 }]
-            };
-
-            new Chart(document.getElementById('marketShareChart'), {
-                type: 'doughnut',
-                data: marketShareData,
-                options: {
-                    ...globalChartOptions,
-                    plugins: {
-                        ...globalChartOptions.plugins,
-                        tooltip: {
-                            ...globalChartOptions.plugins.tooltip,
-                            callbacks: {
-                            ...globalChartOptions.plugins.tooltip.callbacks,
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + '%';
-                                    }
-                                    return label;
-                                }
-                            }
-                        },
-                        datalabels: {
-                            color: '#FFF',
-                            formatter: (value, context) => {
-                                let sum = 0;
-                                let dataArr = context.chart.data.datasets[0].data;
-                                dataArr.map(data => {
-                                    sum += data;
-                                });
-                                let percentage = (value * 100 / sum).toFixed(1) + '%';
-                                return percentage;
-                            },
-                            textShadowBlur: 4,
-                            textShadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            });
-
-            const priceComparisonData = {
-                labels: ['SoMuch', 'Маслогия', 'Esoro', 'Oliomania'],
-                datasets: [{
-                    label: 'Цена (₽)',
-                    data: [1457, 1559, 1244, 1331],
-                    backgroundColor: ['#1E56A0', '#4C99F9', '#76ABDF', '#D6E6F2'],
-                    borderColor: '#1E56A0',
-                    borderWidth: 1,
-                    borderRadius: 4
-                }]
-            };
-
-            new Chart(document.getElementById('priceComparisonChart'), {
-                type: 'bar',
-                data: priceComparisonData,
-                options: {
-                    ...globalChartOptions,
-                    plugins: {
-                        ...globalChartOptions.plugins,
-                        legend: {
-                            display: false
-                        },
-                        datalabels: {
-                            anchor: 'end',
-                            align: 'top',
-                            offset: 4,
-                            formatter: (value, context) => {
-                                return value + ' ₽';
-                            },
-                            color: '#0A2463'
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
                         }
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            grid: {
-                                color: '#e0e7ff'
-                            },
-                            ticks: {
-                                color: '#3E6D9C'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#3E6D9C'
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
                             }
                         }
                     }
                 }
+            }
+        });
+
+        // Текущие продажи Esoro
+        const ctx2 = document.getElementById('currentSalesChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Авокадо', 'Тыквенное', 'Черный тмин'],
+                datasets: [{
+                    label: 'Продажи (шт/мес)',
+                    data: [36, 22, 6],
+                    backgroundColor: ['#FF6384', '#FFCE56', '#36A2EB'],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 10
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Маржинальность
+        const ctx3 = document.getElementById('marginChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Авокадо', 'Тыквенное', 'Черный тмин'],
+                datasets: [
+                    {
+                        label: 'Себестоимость',
+                        data: [860, 890, 485],
+                        backgroundColor: '#E74C3C',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Комиссия + Реклама',
+                        data: [563, 602, 343],
+                        backgroundColor: '#F39C12',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Чистая прибыль',
+                        data: [337, 388, 212],
+                        backgroundColor: '#27AE60',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '₽';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '₽';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Сравнение сценариев
+        const ctx4 = document.getElementById('scenarioComparisonChart').getContext('2d');
+        new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: ['Продажи (шт)', 'Выручка (K₽)', 'Прибыль (K₽)'],
+                datasets: [
+                    {
+                        label: 'Сценарий 1: Статус-кво',
+                        data: [439, 757, 150],
+                        backgroundColor: '#95A5A6',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Сценарий 2: Усиление контента (РЕКОМЕНДУЕМЫЙ)',
+                        data: [975, 1667, 234],
+                        backgroundColor: '#27AE60',
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Сценарий 3: Ценовая война',
+                        data: [1484, 2256, 329],
+                        backgroundColor: '#E74C3C',
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let suffix = '';
+                                if (context.dataIndex === 0) suffix = ' шт';
+                                else suffix = ' K₽';
+                                return context.dataset.label + ': ' + context.parsed.y + suffix;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Анимация при загрузке
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.6s ease';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+
+        // Интерактивность для карточек сценариев
+        document.querySelectorAll('.scenario-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Убираем активный класс с других карточек
+                document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
+                // Добавляем активный класс к текущей
+                this.classList.add('active');
             });
         });
     </script>
-</body>
+
+    <style>
+        .scenario-card.active {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Анимация для метрик */
+        .metric-value {
+            transition: all 0.3s ease;
+        }
+        
+        .metric:hover .metric-value {
+            transform: scale(1.1);
+            color: #3498db;
+        }
+        
+        /* Стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .scenario-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .competitive-table {
+                font-size: 0.8rem;
+            }
+            
+            .competitive-table th,
+            .competitive-table td {
+                padding: 8px 4px;
+            }
+        }
+        
+        /* Стили для печати */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .scenario-card {
+                background: #f8f9fa !important;
+                color: #333 !important;
+                border: 1px solid #ddd;
+            }
+            
+            .key-insights {
+                background: #f8f9fa !important;
+                color: #333 !important;
+                border: 1px solid #ddd;
+            }
+        }
+        
+        /* Дополнительные улучшения для визуализации */
+        .metric-value.positive {
+            color: #27ae60;
+        }
+        
+        .metric-value.negative {
+            color: #e74c3c;
+        }
+        
+        .metric-value.neutral {
+            color: #f39c12;
+        }
+        
+        /* Индикаторы трендов */
+        .trend-up::after {
+            content: " ↗";
+            color: #27ae60;
+        }
+        
+        .trend-down::after {
+            content: " ↘";
+            color: #e74c3c;
+        }
+        
+        .trend-stable::after {
+            content: " →";
+            color: #f39c12;
+        }
+    </style>
+</head>
 </html>
